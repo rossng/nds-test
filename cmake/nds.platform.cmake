@@ -1,0 +1,28 @@
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_VERSION r44)
+set(CMAKE_SYSTEM_PROCESSOR arm-eabi)
+
+set(DEVKITARM $ENV{DEVKITARM})
+set(DEVKITPRO $ENV{DEVKITPRO})
+
+if(NOT DEVKITARM)
+       message(FATAL_ERROR "Please set DEVKITARM in your environment")
+endif()
+
+set(CMAKE_C_COMPILER ${DEVKITARM}/bin/arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER ${DEVKITARM}/bin/arm-none-eabi-g++)
+set(CMAKE_FIND_ROOT_PATH ${DEVKITARM})
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+set(CMAKE_FIND_LIBRARY_PREFIXES lib)
+set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+include_directories(${DEVKITPRO}/libnds/include)
+link_directories(${DEVKITPRO}/libnds/lib)
+find_library(NDS9 nds9)
+find_library(NDS7 nds7)
+find_library(DSWIFI7 dswifi7)
+find_library(DSWIFI9 dswifi9)
+find_library(MM7 mm7)
+find_library(MM9 mm9)
