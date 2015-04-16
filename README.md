@@ -6,16 +6,17 @@ The CMake build files are tailored for libnds but should be easily adaptable for
 
 ## Structure
 
-.
-├── CMakeLists.txt
-├── arm7
-│   ├── CMakeLists.txt
-│   └── main-arm7.cpp
-├── arm9
-│   ├── CMakeLists.txt
-│   └── main-arm9.cpp
-├── build
-└── cmake
-    ├── nds-base-makefile
-    ├── nds.macro.cmake
-    └── nds.platform.cmake
+Project structure is very simple. ARM7 and ARM9 source trees are separate
+
+    myproject
+    ├── CMakeLists.txt
+    ├── arm7 <-- ARM7 source files
+    │   ├── CMakeLists.txt
+    │   └── main-arm7.cpp
+    ├── arm9 <-- ARM9 source files
+    │   ├── CMakeLists.txt
+    │   └── main-arm9.cpp
+    └── cmake <-- Platform & Macros definitions
+        ├── nds-base-makefile
+        ├── nds.macro.cmake
+        └── nds.platform.cmake
