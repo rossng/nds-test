@@ -1,3 +1,46 @@
+macro(SETUP_ARM7_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
+
+  add_definitions(-DARM7)
+
+  set(ARM7_TARGET_NAME "${TARGET_NAME}_arm7")
+
+  add_executable(${ARM7_TARGET_NAME} ${TARGET_FILES})
+  setup_nds_target(${ARM7_TARGET_NAME} ds_arm7.specs "${TARGET_LIBS}")
+
+endmacro(SETUP_ARM7_TARGET)
+
+macro(SETUP_ARM9_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
+
+  add_definitions(-DARM9)
+
+  set(ARM9_TARGET_NAME "${TARGET_NAME}_arm9")
+  
+  add_executable(${ARM9_TARGET_NAME} ${TARGET_FILES})
+  setup_nds_target(${ARM9_TARGET_NAME} ds_arm9.specs "${TARGET_LIBS}")
+  
+endmacro(SETUP_ARM9_TARGET)
+
+macro(SETUP_NDS_TARGET TARGET_NAME LINKER_SPEC TARGET_LIBS)
+
+  # Link all libraries
+  foreach(LIB_NAME ${TARGET_LIBS})
+    if(NOT DEFINED "LIB_${LIB_NAME}")
+      find_library("LIB_${LIB_NAME}" ${LIB_NAME})
+    endif()
+    target_link_libraries(${TARGET_NAME} ${LIB_NAME})
+  endforeach(LIB_NAME)
+
+  # Setup linker and arch flags
+  set_target_properties(${TARGET_NAME}
+    PROPERTIES
+    LINK_FLAGS "-specs=${LINKER_SPEC}"
+    COMPILER_FLAGS "-mthumb -mthumb-interwork")
+
+  # Setup objcopy
+  objcopy_file(${TARGET_NAME})
+  
+endmacro(SETUP_NDS_TARGET)
+
 macro(OBJCOPY_FILE EXE_NAME)
  set(FO ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME}.bin)
  set(FI ${CMAKE_CURRENT_BINARY_DIR}/${EXE_NAME})
