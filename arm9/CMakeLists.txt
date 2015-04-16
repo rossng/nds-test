@@ -1,7 +1,7 @@
 # include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(ARM9_FILES
-    template-arm9.cpp)
+    main.arm9.cpp)
 
 set(ARM9_LIBS nds9)
 
