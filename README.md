@@ -31,4 +31,5 @@ A shared folder is symlinked between the two source trees.
 
 ## TODO
 
-* Add target with commands to automatically compile assets
+* ~~Add target with commands to automatically compile assets~~
+* ~~Copy NDS file to an easily accessible place~~

@@ -18,4 +18,4 @@ add_subdirectory(shared)
 add_subdirectory(arm7)
 add_subdirectory(arm9)
 
-ndstool_files("arm7/${PROJECT_NAME}_arm7" "arm9/${PROJECT_NAME}_arm9" hello-world)
+ndstool_files("arm7/${PROJECT_NAME}_arm7" "arm9/${PROJECT_NAME}_arm9" ${PROJECT_NAME})

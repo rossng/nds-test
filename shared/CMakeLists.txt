@@ -1,4 +1,4 @@
 set(SHARED_FILES
     example.cpp)
 
-add_library(project_shared OBJECT ${SHARED_FILES})
+add_library("${PROJECT_NAME}_shared" OBJECT ${SHARED_FILES})
