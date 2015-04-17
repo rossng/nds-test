@@ -1,7 +1,6 @@
 # include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(ARM7_FILES
-    shared/example.cpp
     main-arm7.cpp)
 
 set(ARM7_LIBS nds7

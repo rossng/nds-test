@@ -31,7 +31,7 @@
 #include <dswifi7.h>
 #include <maxmod7.h>
 
-#include "shared/example.hpp"
+#include <example.hpp>
 
 //---------------------------------------------------------------------------------
 void VblankHandler(void) {

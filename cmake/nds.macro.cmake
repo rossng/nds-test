@@ -6,7 +6,7 @@ macro(SETUP_ARM7_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
 
   set(ARM7_TARGET_NAME "${TARGET_NAME}_arm7")
 
-  add_executable(${ARM7_TARGET_NAME} ${TARGET_FILES})
+  add_executable(${ARM7_TARGET_NAME} $<TARGET_OBJECTS:project_shared> ${TARGET_FILES})
   setup_nds_target(${ARM7_TARGET_NAME} ds_arm7.specs "${TARGET_LIBS}")
 
   add_dependencies(${ARM7_TARGET_NAME} ${GRIT_TARGET_NAME})
@@ -21,7 +21,7 @@ macro(SETUP_ARM9_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
 
   set(ARM9_TARGET_NAME "${TARGET_NAME}_arm9")
   
-  add_executable(${ARM9_TARGET_NAME} ${TARGET_FILES})
+  add_executable(${ARM9_TARGET_NAME} $<TARGET_OBJECTS:project_shared> $<TARGET_OBJECTS:${GRIT_TARGET_NAME}> ${TARGET_FILES})
   setup_nds_target(${ARM9_TARGET_NAME} ds_arm9.specs "${TARGET_LIBS}")
   
   add_dependencies(${ARM9_TARGET_NAME} ${GRIT_TARGET_NAME})
@@ -110,8 +110,8 @@ macro(NDSTOOL_FILES arm7_NAME arm9_NAME exe_NAME)
   get_filename_component(TGT7 "${arm7_NAME}" NAME)
   get_filename_component(TGT9 "${arm9_NAME}" NAME)
 
-  add_custom_target("Target97_${TGT}" ALL DEPENDS ${FO} VERBATIM)
-  add_dependencies("Target97_${TGT}"
+  add_custom_target("combined_${TGT}" ALL DEPENDS ${FO} VERBATIM)
+  add_dependencies("combined_${TGT}"
                    "TargetObjCopy_${TGT7}"
                    "TargetObjCopy_${TGT9}")
                    
@@ -144,8 +144,8 @@ if(GRIT_EXE)
       get_filename_component(FILE_NAME ${FILE_PNG} NAME)
       
       # Compute output files
-      string(REPLACE ".png" ".h" FILE_H ${FILE_PNG})
-      string(REPLACE ".png" ".c" FILE_C ${FILE_PNG})
+      string(REPLACE ".png" ".h" FILE_H "${GEN_PATH}/${FILE_NAME}")
+      string(REPLACE ".png" ".c" FILE_C "${GEN_PATH}/${FILE_NAME}")
 
       set(IMAGE_FILES_C ${IMAGE_FILES_C} ${FILE_C})
       set(IMAGE_FILES_H ${IMAGE_FILES_H} ${FILE_H})
@@ -159,12 +159,8 @@ if(GRIT_EXE)
     
     # Create a target with those files
     # So IDEs can recognize them
-    add_custom_target(${GRIT_TARGET_NAME}
-                      SOURCES ${FILES}
-                              ${IMAGE_FILES_C}
-                              ${IMAGES_FILES_H})
-
-    include_directories(${GEN_PATH})
+    add_library(${GRIT_TARGET_NAME} OBJECT ${IMAGE_FILES_C})
+    add_custom_target("${GRIT_TARGET_NAME}_raw" SOURCES ${FILES})
     
   endmacro(ADD_GRIT_TARGET)
 endif(GRIT_EXE)

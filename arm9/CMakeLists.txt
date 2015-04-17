@@ -2,7 +2,7 @@
 
 set(ARM9_FILES
     ${IMAGE_FILES}
-    shared/example.cpp
+    init.cpp
     main-arm9.cpp)
 
 set(ARM9_LIBS nds9)
