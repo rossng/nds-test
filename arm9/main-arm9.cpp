@@ -7,11 +7,17 @@
 #include <nds.h>
 #include <stdio.h>
 
+#include "shared/example.hpp"
+
 //---------------------------------------------------------------------------------
 int main(void) {
 //---------------------------------------------------------------------------------
 	touchPosition touch;
 
+  example ex(12);
+  ex.val(17);
+  int v = ex.val();
+  
 	consoleDemoInit();  //setup the sub screen for printing
 
 	iprintf("\n\n\tHello DS dev'rs\n");

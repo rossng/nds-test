@@ -31,6 +31,8 @@
 #include <dswifi7.h>
 #include <maxmod7.h>
 
+#include "shared/example.hpp"
+
 //---------------------------------------------------------------------------------
 void VblankHandler(void) {
 //---------------------------------------------------------------------------------
@@ -76,8 +78,12 @@ int main() {
 
 	irqEnable( IRQ_VBLANK | IRQ_VCOUNT | IRQ_NETWORK);
 	
-	setPowerButtonCB(powerButtonCB);   
-
+	setPowerButtonCB(powerButtonCB);
+  
+  example ex(12);
+  ex.val(17);
+  int v = ex.val();
+  
 	// Keep the ARM7 mostly idle
 	while (!exitflag) {
 		if ( 0 == (REG_KEYINPUT & (KEY_SELECT | KEY_START | KEY_L | KEY_R))) {
