@@ -7,6 +7,10 @@ include(nds.macro)
 
 project(hello_world)
 
+set(ASSETS_PATH "${CMAKE_SOURCE_DIR}/assets")
+set(ASSETS_GEN  "${ASSETS_PATH}/gen")
+add_grit_target("${PROJECT_NAME}_assets" "${ASSETS_PATH}/images" ${ASSETS_GEN})
+
 add_subdirectory(arm7)
 add_subdirectory(arm9)
 

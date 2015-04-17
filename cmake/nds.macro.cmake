@@ -1,3 +1,5 @@
+# Sets up an ARM7 target
+# Adds the definition for the libnds headers
 macro(SETUP_ARM7_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
 
   add_definitions(-DARM7)
@@ -7,8 +9,12 @@ macro(SETUP_ARM7_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
   add_executable(${ARM7_TARGET_NAME} ${TARGET_FILES})
   setup_nds_target(${ARM7_TARGET_NAME} ds_arm7.specs "${TARGET_LIBS}")
 
+  add_dependencies(${ARM7_TARGET_NAME} ${GRIT_TARGET_NAME})
+  
 endmacro(SETUP_ARM7_TARGET)
 
+# Sets up an ARM9 target
+# Adds the definition for the libnds headers
 macro(SETUP_ARM9_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
 
   add_definitions(-DARM9)
@@ -18,8 +24,11 @@ macro(SETUP_ARM9_TARGET TARGET_NAME TARGET_LIBS TARGET_FILES)
   add_executable(${ARM9_TARGET_NAME} ${TARGET_FILES})
   setup_nds_target(${ARM9_TARGET_NAME} ds_arm9.specs "${TARGET_LIBS}")
   
+  add_dependencies(${ARM9_TARGET_NAME} ${GRIT_TARGET_NAME})
+  
 endmacro(SETUP_ARM9_TARGET)
 
+# Used to set informations for ARM7 and ARM9 targets
 macro(SETUP_NDS_TARGET TARGET_NAME LINKER_SPEC TARGET_LIBS)
 
   # Link all libraries
@@ -110,3 +119,52 @@ macro(NDSTOOL_FILES arm7_NAME arm9_NAME exe_NAME)
   set_directory_properties(PROPERTIES
                            ADDITIONAL_MAKE_CLEAN_FILES "${extra_clean_files};${FO}")
 endmacro(NDSTOOL_FILES)
+
+if(NOT GRIT_EXE)
+ message(STATUS "Looking for grit")
+ find_program(GRIT_EXE grit ${DEVKITARM}/bin)
+ if(GRIT_EXE)
+  message(STATUS "Looking for grit -- ${GRIT_EXE}")
+ endif(GRIT_EXE)
+endif(NOT GRIT_EXE)
+
+if(GRIT_EXE)
+  macro(ADD_GRIT_TARGET NAME SRC_PATH GEN_PATH)
+    # Create variable with target name
+    set(GRIT_TARGET_NAME ${NAME})
+    
+    # Find all PNG files
+    file(GLOB FILES "${SRC_PATH}/*.png")
+
+    # Create target directory
+    file(MAKE_DIRECTORY ${GEN_PATH})
+    
+    # Add a command to process each file with grit
+    foreach(FILE_PNG ${FILES})
+      get_filename_component(FILE_NAME ${FILE_PNG} NAME)
+      
+      # Compute output files
+      string(REPLACE ".png" ".h" FILE_H ${FILE_PNG})
+      string(REPLACE ".png" ".c" FILE_C ${FILE_PNG})
+
+      set(IMAGE_FILES_C ${IMAGE_FILES_C} ${FILE_C})
+      set(IMAGE_FILES_H ${IMAGE_FILES_H} ${FILE_H})
+      
+      # Create grit command
+      add_custom_command(OUTPUT ${FILE_H} ${FILE_C}
+                         COMMAND ${GRIT_EXE}
+                         ARGS ${FILE_PNG} -ftc -o${GEN_PATH}/${FILE_NAME})
+      
+    endforeach(FILE_PNG)
+    
+    # Create a target with those files
+    # So IDEs can recognize them
+    add_custom_target(${GRIT_TARGET_NAME}
+                      SOURCES ${FILES}
+                              ${IMAGE_FILES_C}
+                              ${IMAGES_FILES_H})
+
+    include_directories(${GEN_PATH})
+    
+  endmacro(ADD_GRIT_TARGET)
+endif(GRIT_EXE)
