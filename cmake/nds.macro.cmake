@@ -107,13 +107,15 @@ if(NDSTOOL_EXE)
                                  ADDITIONAL_MAKE_CLEAN_FILES "${extra_clean_files};${FO}")
 
         set(NDS_FILE "${CMAKE_SOURCE_DIR}/${EXE_NAME}.nds")
+
         add_custom_command(OUTPUT ${NDS_FILE}
                            COMMAND ${CMAKE_COMMAND} -E copy
-                           ARGS ${FO} ${NDS_FILE}
-                           DEPENDS ${FO})
+                           ARGS ${FO} ${NDS_FILE})
+
         add_custom_target("${TGT}_nds" ALL
-                          DEPENDS ${NDS_FILE}
-                          VERBATIM)
+                          DEPENDS ${NDS_FILE})
+
+        add_dependencies("${TGT}_nds" "${TGT}_combined")
     endmacro(NDSTOOL_FILES)
 endif(NDSTOOL_EXE)
 
