@@ -2,3 +2,4 @@ build/
 assets/gen/
 *.nds
 .idea/
+cmake-build-debug/

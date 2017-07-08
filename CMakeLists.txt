@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.0)
 
+cmake_policy(SET CMP0053 OLD)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 #set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/nds.platform.cmake")
 include(nds.platform)
 include(nds.macro)
+
+
+message(STATUS "Using compiler " ${CMAKE_C_COMPILER})
 
 project(hello_world)
 
